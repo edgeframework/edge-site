@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Builds site for a particular version
+
+version="$1"
+
+if [ -z "$version" ]
+then
+	echo "Please specify version"
+	exit 1
+else
+	echo "Building version $version"
+fi
+
+# check if version exists
+if [ ! -d "versions/$version" ]
+then
+	echo "Version does not exist -> versions/$version"
+	exit 2
+fi
+
+# start jekyll server
+pushd "versions/$version"
+jekyll --server --auto --base-url "/$version"
+rm -rf _site
+popd
