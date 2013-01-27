@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Publishes gh-pages
+if [ -d "gh-pages" ]
+   echo "Changing to gh-pages directory"
+   then pushd gh-pages;
+
+   echo "Pushing to gh-pages"
+   git add .;
+   git push origin;
+
+   echo "Done";
+   popd;
+fi

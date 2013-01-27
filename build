@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Builds site for a particular version
+
+branch="gh-pages"
+repository="git@github.com:darylteo/edge-site.git"
+
+version="$1"
+
+if [ -z "$version" ]
+then
+	echo "Please specify version"
+	exit 1
+else
+	echo "Building version $version"
+fi
+
+# check if version exists
+if [ ! -d "versions/$version" ]
+then
+	echo "Version does not exist -> versions/$version"
+	exit 2
+fi
+
+# clone gh-pages if it does not exist
+if [ ! -d "gh-pages" ]
+then
+	git clone -b "$branch" "$repository" gh-pages;
+fi
+
+# perform jekyll compilation
+jekyll "versions/$version/" "gh-pages/$version/"
