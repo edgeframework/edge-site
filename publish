@@ -2,13 +2,21 @@
 
 # Publishes gh-pages
 if [ -d "gh-pages" ]
-   echo "Changing to gh-pages directory"
-   then pushd gh-pages;
+then
+	echo "Changing to gh-pages directory"
+	pushd gh-pages;
 
-   echo "Pushing to gh-pages"
-   git add .;
-   git push origin;
+	echo "Pushing to gh-pages"
+	git add .;
+	git commit;
 
-   echo "Done";
-   popd;
+	if [ "$?" == 1 ]
+	then
+		exit 1
+	fi
+
+	git push origin gh-pages;
+
+	echo "Done";
+	popd;
 fi
