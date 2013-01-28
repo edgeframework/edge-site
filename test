@@ -3,6 +3,10 @@
 # Builds site for a particular version
 
 version="$1"
+branch="gh-pages"
+repository="git@github.com:darylteo/edge-site.git"
+
+version="$1"
 
 if [ -z "$version" ]
 then
@@ -19,8 +23,18 @@ then
 	exit 2
 fi
 
-# start jekyll server
-pushd "versions/$version"
-jekyll --server --auto --base-url "/$version"
-rm -rf _site
+# clone gh-pages if it does not exist
+if [ ! -d "gh-pages" ]
+then
+	git clone -b "$branch" "$repository" gh-pages;
+fi
+
+# perform jekyll compilation
+jekyll "versions/$version/" "gh-pages/$version/" --auto &
+jekyll_pid=$!
+
+pushd gh-pages
+vertx run ../server.js
 popd
+
+kill $jekyll_pid
