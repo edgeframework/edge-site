@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Builds site for a particular version
-
 version="$1"
 branch="gh-pages"
 repository="git@github.com:darylteo/edge-site.git"
 
-version="$1"
+compiledDir="_site"
+environmentFile="versions/$version/_dev.yml"
+configFile="versions/$version/_config.yml"
 
 if [ -z "$version" ]
 then
@@ -30,11 +31,16 @@ then
 fi
 
 # perform jekyll compilation
-jekyll "versions/$version/" "gh-pages/$version/" --auto &
+mkdir $compiledDir
+cp "$environmentFile" "$configFile"
+jekyll "versions/$version/" "$compiledDir/$version" --auto --no-server &
 jekyll_pid=$!
 
-pushd gh-pages
+pushd $compiledDir
 vertx run ../server.js
 popd
 
+# cleanup
 kill $jekyll_pid
+rm -r $compiledDir
+rm $configFile

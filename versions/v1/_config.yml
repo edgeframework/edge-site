@@ -1,6 +1,0 @@
-baseurl:         /v1
-
-repository_url:  //github.com/darylteo/edge/
-
-# temporary until jekyll fix comes in
-plugins:         versions/v1/_plugins
