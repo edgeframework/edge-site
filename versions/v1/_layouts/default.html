@@ -1,29 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset=utf-8 />
-	<title>Edge Framework - {% if page.title %} {{ page.title }} {% endif %}</title>
-	<link rel="stylesheet" href="/css/styles.css" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+  <title>Edge Framework - {% if page.title %} {{ page.title }} {% endif %}</title>
+
+  <link rel="stylesheet" href="{{ site.url }}/stylesheets/styles.css">
+  <link rel="stylesheet" href="{{ site.url }}/stylesheets/pygment_trac.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 </head>
 <body>
-	<div id="main">
-		<header>
-			<h1>Edge - a Web Application Framework for the Vert.x Platform</h1>
-		<header>
-		<nav role="navigation">
-			<ul>
-				<li><a href="{{ site.url }}/">Home</a></li>
-				<li><a href="{{ site.url }}/downloads/">Downloads</a></li>
-				<li><a href="{{ site.url }}/learn/">Learn</a></li>
-				<li><a href="{{ site.repository_url }}" target="_blank">GitHub</a></li>
-			</ul>
-		</nav>
-		<article class="content">
-			{{ content }}
-		</article>
-		<footer>
-			<p>&copy; Edge Framework | Daryl Teo 2013 | All Rights Reserved.</p>
-		</footer>
-	</div>
+  <div id="main">
+    <header>
+      <h1>Edge - a Web Application Framework for the Vert.x Platform</h1>
+    <header>
+    <nav role="navigation">
+      <ul>
+        <li><a href="{{ site.url }}/">Home</a></li>
+        <li><a href="{{ site.url }}/downloads/">Downloads</a></li>
+        <li><a href="{{ site.url }}/learn/">Learn</a></li>
+        <li><a href="{{ site.repository_url }}" target="_blank">GitHub</a></li>
+      </ul>
+    </nav>
+    <article class="content">
+      {{ content }}
+    </article>
+    <footer>
+      <p>&copy; Edge Framework | Daryl Teo 2013 | All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script src="{{ site.url }}/javascripts/scale.fix.js"></script>
 </body>
 </html>

@@ -4,6 +4,7 @@ plugins:         versions/v1/_plugins
 
 # common
 repository_url:  //github.com/darylteo/edge/
+pygments:        true
 
 learn_pages:
   - index

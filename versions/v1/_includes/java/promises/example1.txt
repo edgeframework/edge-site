@@ -1,0 +1,15 @@
+asyncStep1(new Handler<String>(){
+  public void handle(String value){
+    ...
+    asyncStep2(new Handler<String>(){
+      public void handle(String value){
+        ...
+        asyncStep3(new Handler<String>(){
+          public void handle(String value){
+            ...
+          }
+        });
+      }
+    });
+  }
+});

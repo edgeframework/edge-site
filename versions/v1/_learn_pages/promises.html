@@ -1,12 +1,50 @@
 ---
 layout: learn
 ---
+<h2>Promises Module</h2>
 <section>
-  <h2>Promises</h2>
+  <h3>Why?</h3>
+  <p>
+    Because <a href="http://callbackhell.com/">Callback Hell</a>.
+  </p>
+  <p>
+    Vert.x is a relatively new platform utilising the event loop, usable by multiple languages (and not just Javascript). These languages do not play very well with nested levels of callbacks creating a mess of callbacks that are difficult to read and maintain.
+  </p>
+  <p>
+    Taking inspiration from <a href="//github.com/kriskowal/q">Q.js</a> for node.js, the Promises module solves this in a similar fashion.
+  </p>
+</section>
+  <h3>What about &lt;Some Other Technology&gt;</h3>
+  <p>
+    When designing a solution, I also considered other existing technologies like Java Futures, Scala Continuations, and JavaFlow. However, since we only have 1 thread running the event loop, we are't allowed to block on it.
+  </p>
+  <p>
+    Scala Continuations would seems like it may support this, but unfortunately it does not. When you use continutions, during the compilation phase it changes the return type to a ControlContext. But all functions down the chain needs to be specified as @cpsParam to signify to the compiler that it is part of a continuation stack so that your code compiles. Not an ideal solution and won't work cross languages.
+  </p>
+  <p>
+    JavaFlow does not do exactly that. You basically have to save the stack of the whole thread in memory from which it may later resume, but the thread is no longer executing - work has to be done on a separate thread. You still cannot manipulate the contents of that stack easily. JavaFlow also requires ALL classes to be instrumented to perform correctly... this means every jar, library, module, verticle.
+  </p>
+    Python yields also don't do this as they change the return type... into a Generator. This works easily because it isn't strictly typed but won't work cross languages.
+  </p>
+  <p>
+    The point is: anything that blocks on the executing thread and spawns a new one would not work on Vert.x. Promises remain the best solution to dealing with Callback Hell.
+  </p>
 </section>
 <section>
-  <h2>Usage</h2>
+  <h3>Usage</h3>
   <p>
-    {% example promises/example1.md %}
+    Promises aims to flatten these “Callback Pyramids” in a way that is both readable and maintainable.
+  </p>
+  <p>
+    As an example, you can turn this:
+  </p>
+  <p>
+    {% example promises/example1 %}
+  </p>
+  <p>
+    Into This:
+  </p>
+  <p>
+    {% example promises/example2 %}
   </p>
 </section>
