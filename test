@@ -42,5 +42,4 @@ popd
 
 # cleanup
 kill $jekyll_pid
-rm -r $compiledDir
 rm $configFile

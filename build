@@ -36,5 +36,4 @@ cp "$environmentFile" "$configFile"
 jekyll "versions/$version/" "$compiledDir/$version"
 
 # cleanup
-rm -r $compiledDir
 rm $configFile
