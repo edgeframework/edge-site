@@ -8,12 +8,10 @@ module Jekyll
     end
 
     def render(context)
-      language = context["page"]["layout"]
+      language = context["page"]["language"]["name"]
 
       partial = Liquid::Template.parse("{% include #{language}/#{@path} %}")
       partial.render(context)
-
-      # "#{language} example"
     end
   end
 end

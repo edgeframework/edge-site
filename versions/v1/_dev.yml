@@ -5,5 +5,15 @@ plugins:         versions/v1/_plugins
 # common
 repository_url:  //github.com/darylteo/edge/
 
+learn_pages:
+  - index
+  - promises
+  - eventbus
+  - routematcher
+  - controllers
+
+languages:
+  - name: java
+
 # environment settings
 url:             //localhost:8080/v1
