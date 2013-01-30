@@ -4,7 +4,7 @@
 branch="gh-pages"
 repository="git@github.com:darylteo/edge-site.git"
 
-compiledDir="_site"
+compiledDir="gh-pages/"
 srcDir="src"
 environmentFile="$srcDir/_prod.yml"
 configFile="$srcDir/_config.yml"
@@ -16,7 +16,6 @@ then
 fi
 
 # perform jekyll compilation
-mkdir $compiledDir
 cp "$environmentFile" "$configFile"
 jekyll "$srcDir" "$compiledDir" --no-server --no-auto > /dev/null 2>&1;
 
@@ -24,7 +23,7 @@ jekyll "$srcDir" "$compiledDir" --no-server --no-auto > /dev/null 2>&1;
 if [ -d "gh-pages" ]
 then
 	echo "Changing to gh-pages directory"
-	pushd gh-pages;
+	pushd 'gh-pages';
 
 	echo "Pushing to gh-pages"
 	git add .;
@@ -32,6 +31,7 @@ then
 
 	if [ "$?" == 1 ]
 	then
+		popd;
 		exit 1
 	fi
 

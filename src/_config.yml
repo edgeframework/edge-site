@@ -17,4 +17,4 @@ languages:
   - name: java
 
 # environment settings
-url:             //localhost:8080
+url:             //darylteo.github.com/edge-site/v1
