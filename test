@@ -1,39 +1,24 @@
 #!/bin/bash
 
 # Builds site for a particular version
-version="$1"
 branch="gh-pages"
 repository="git@github.com:darylteo/edge-site.git"
 
 compiledDir="_site"
-environmentFile="versions/$version/_dev.yml"
-configFile="versions/$version/_config.yml"
-
-if [ -z "$version" ]
-then
-	echo "Please specify version"
-	exit 1
-else
-	echo "Building version $version"
-fi
-
-# check if version exists
-if [ ! -d "versions/$version" ]
-then
-	echo "Version does not exist -> versions/$version"
-	exit 2
-fi
+srcDir="src"
+environmentFile="$srcDir/_dev.yml"
+configFile="$srcDir/_config.yml"
 
 # clone gh-pages if it does not exist
 if [ ! -d "gh-pages" ]
 then
-	git clone -b "$branch" "$repository" gh-pages;
+  git clone -b "$branch" "$repository" gh-pages;
 fi
 
 # perform jekyll compilation
 mkdir $compiledDir
 cp "$environmentFile" "$configFile"
-jekyll "versions/$version/" "$compiledDir/$version" --auto --no-server &
+jekyll "$srcDir" "$compiledDir/$version" --auto --no-server &
 jekyll_pid=$!
 
 pushd $compiledDir

@@ -1,6 +1,6 @@
 # temporary hack until jekyll fix comes in
 # does not pick up _plugins from the source directory from
-plugins:         versions/v1/_plugins
+plugins:         src/_plugins
 
 # common
 repository_url:  //github.com/darylteo/edge/
@@ -17,4 +17,4 @@ languages:
   - name: java
 
 # environment settings
-url:             //localhost:8080/v1
+url:             //localhost:8080

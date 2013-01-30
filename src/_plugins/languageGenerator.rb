@@ -5,7 +5,7 @@ module Jekyll
       @site = site
       @base = base
       @dir = dir
-      @name = "#{page}.html"
+      @name = "#{page}.md"
 
       puts "Generating Page: #{@dir}/#{@name}"
 
@@ -26,7 +26,7 @@ module Jekyll
       languages = site.config['languages'] || [ 'java' ]
 
       languages.each do |language|
-        dir = File.join('learn', language['name'])
+        dir = File.join('guides', language['name'])
         puts("#{dir}")
 
         pages.each do | page |
