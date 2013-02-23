@@ -6,9 +6,9 @@
 
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="//darylteo.github.com/edge-site/stylesheets/spacelab.css">
-  <link rel="stylesheet" href="//darylteo.github.com/edge-site/stylesheets/pygment_trac.css">
-  <link rel="stylesheet" href="//darylteo.github.com/edge-site/stylesheets/styles.css">
+  <link rel="stylesheet" href="//edgeframework.org/stylesheets/spacelab.css">
+  <link rel="stylesheet" href="//edgeframework.org/stylesheets/pygment_trac.css">
+  <link rel="stylesheet" href="//edgeframework.org/stylesheets/styles.css">
 
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
@@ -24,10 +24,10 @@
   <h1>Edge - a Web Application Framework for the Vert.x Platform</h1>
   <nav role="navigation">
     <ul class="nav nav-pills">
-      <li><a href="//darylteo.github.com/edge-site/">Home</a></li>
-      <li><a href="//darylteo.github.com/edge-site/downloads/">Downloads</a></li>
-      <li><a href="//darylteo.github.com/edge-site/guides/java/">Guides</a></li>
-      <li><a href="//darylteo.github.com/edge-site/docs/">Docs</a></li>
+      <li><a href="//edgeframework.org/">Home</a></li>
+      <li><a href="//edgeframework.org/downloads/">Downloads</a></li>
+      <li><a href="//edgeframework.org/guides/java/">Guides</a></li>
+      <li><a href="//edgeframework.org/docs/">Docs</a></li>
       <li><a href="//github.com/darylteo/edge/" target="_blank">Source</a></li>
     </ul>
   </nav>
@@ -76,6 +76,54 @@
 </code></pre></div>
 <h3 id='event_bus'>Event Bus</h3>
 
+<p>Working with the EventBus is difficult, as lots of handlers and callbacks need to be registered, leading to &#8220;Callback Pyramids&#8221;.</p>
+
+<p>The Edge Event Bus library uses the powerful functionality of Promises and eliminates the need for callbacks completely. For example, this is how you would normally handle a event bus message sent to your verticle:</p>
+<div class='highlight'><pre><code class='java'><span class='n'>vertx</span><span class='o'>.</span><span class='na'>eventBus</span><span class='o'>().</span><span class='na'>registerHandler</span><span class='o'>(</span><span class='s'>&quot;server.address.action&quot;</span><span class='o'>,</span> <span class='k'>new</span> <span class='n'>Handler</span><span class='o'>&lt;</span><span class='n'>Message</span><span class='o'>&lt;</span><span class='n'>String</span><span class='o'>&gt;&gt;()</span> <span class='o'>{</span>
+  <span class='nd'>@Override</span>
+  <span class='kd'>public</span> <span class='kt'>void</span> <span class='nf'>handle</span><span class='o'>(</span><span class='n'>Message</span><span class='o'>&lt;</span><span class='n'>String</span><span class='o'>&gt;</span> <span class='n'>message</span><span class='o'>)</span> <span class='o'>{</span>
+    <span class='n'>message</span><span class='o'>.</span><span class='na'>reply</span><span class='o'>(</span><span class='s'>&quot;Hello &quot;</span> <span class='o'>+</span> <span class='n'>message</span><span class='o'>.</span><span class='na'>body</span><span class='o'>);</span>
+  <span class='o'>}</span>
+<span class='o'>});</span>
+</code></pre></div>
+<p>Now, you can simply group your actions into classes, and register as many as you want to handle your event bus messages.</p>
+<div class='highlight'><pre><code class='java'><span class='kd'>class</span> <span class='nc'>Receiver</span> <span class='o'>{</span>
+  <span class='nd'>@EventBusParams</span><span class='o'>(</span><span class='s'>&quot;name&quot;</span><span class='o'>)</span>
+  <span class='kd'>public</span> <span class='n'>String</span> <span class='nf'>action</span><span class='o'>(</span><span class='n'>String</span> <span class='n'>name</span><span class='o'>)</span> <span class='o'>{</span>
+    <span class='k'>return</span> <span class='s'>&quot;Hello &quot;</span> <span class='o'>+</span> <span class='n'>name</span><span class='o'>;</span>
+  <span class='o'>}</span>
+<span class='o'>}</span>
+
+<span class='n'>EventBus</span><span class='o'>.</span><span class='na'>registerReceiver</span><span class='o'>(</span><span class='s'>&quot;server.address&quot;</span><span class='o'>,</span> <span class='k'>new</span> <span class='n'>Receiver</span><span class='o'>(),</span> <span class='n'>Receiver</span><span class='o'>.</span><span class='na'>class</span><span class='o'>);</span>
+</code></pre></div>
+<p>But wait there&#8217;s more! What about sending messages?</p>
+<div class='highlight'><pre><code class='java'><span class='n'>vertx</span><span class='o'>.</span><span class='na'>eventBus</span><span class='o'>().</span><span class='na'>send</span><span class='o'>(</span><span class='s'>&quot;server.address.hello&quot;</span><span class='o'>,</span> <span class='s'>&quot;Daryl&quot;</span><span class='o'>,</span> <span class='k'>new</span> <span class='n'>Handler</span><span class='o'>&lt;</span><span class='n'>Message</span><span class='o'>&lt;</span><span class='n'>String</span><span class='o'>&gt;&gt;()</span> <span class='o'>{</span>
+  <span class='nd'>@Override</span>
+  <span class='kd'>public</span> <span class='kt'>void</span> <span class='nf'>handle</span><span class='o'>(</span><span class='n'>Message</span><span class='o'>&lt;</span><span class='n'>String</span><span class='o'>&gt;</span> <span class='n'>reply</span><span class='o'>)</span> <span class='o'>{</span>
+    <span class='n'>System</span><span class='o'>.</span><span class='na'>out</span><span class='o'>.</span><span class='na'>println</span><span class='o'>(</span><span class='n'>reply</span><span class='o'>.</span><span class='na'>body</span><span class='o'>);</span>
+  <span class='o'>}</span>
+<span class='o'>});</span>
+</code></pre></div>
+<p>Now becomes:</p>
+<div class='highlight'><pre><code class='java'><span class='kd'>interface</span> <span class='nc'>SendingInterface</span> <span class='o'>{</span>
+  <span class='nd'>@EventBusParams</span><span class='o'>(</span><span class='s'>&quot;name&quot;</span><span class='o'>)</span>
+  <span class='kd'>public</span> <span class='n'>Promise</span><span class='o'>&lt;</span><span class='n'>String</span><span class='o'>&gt;</span> <span class='nf'>hello</span><span class='o'>(</span><span class='n'>String</span> <span class='n'>name</span><span class='o'>);</span>
+<span class='o'>}</span>
+
+<span class='o'>...</span>
+
+<span class='n'>SendingInterface</span> <span class='n'>sender</span> <span class='o'>=</span> <span class='n'>EventBus</span><span class='o'>.</span><span class='na'>registerSender</span><span class='o'>(</span><span class='s'>&quot;server.address&quot;</span><span class='o'>,</span> <span class='n'>SendingInterface</span><span class='o'>.</span><span class='na'>class</span><span class='o'>);</span>
+<span class='n'>sender</span><span class='o'>.</span><span class='na'>hello</span><span class='o'>(</span><span class='s'>&quot;Daryl&quot;</span><span class='o'>)</span>
+  <span class='o'>.</span><span class='na'>then</span><span class='o'>(</span><span class='k'>new</span> <span class='n'>PromiseHandler</span><span class='o'>&lt;</span><span class='n'>String</span><span class='o'>,</span> <span class='n'>Void</span><span class='o'>&gt;()</span> <span class='o'>{</span>
+    <span class='nd'>@Override</span>
+    <span class='kd'>public</span> <span class='n'>Void</span> <span class='nf'>handle</span><span class='o'>(</span><span class='n'>String</span> <span class='n'>value</span><span class='o'>)</span> <span class='o'>{</span>
+      <span class='n'>System</span><span class='o'>.</span><span class='na'>out</span><span class='o'>.</span><span class='na'>println</span><span class='o'>(</span><span class='n'>value</span><span class='o'>);</span>
+      <span class='k'>return</span> <span class='kc'>null</span><span class='o'>;</span>
+    <span class='o'>}</span>
+  <span class='o'>});</span>
+</code></pre></div>
+<p>With this, all the details of the event bus mechanism is tucked away and you can send messages by simply calling a method.</p>
+
 <h3 id='route_matcher'>Route Matcher</h3>
 
 <h3 id='controllers'>Controllers</h3>
@@ -87,6 +135,6 @@
 </footer>
   </div>
 
-  <script src="//darylteo.github.com/edge-site/javascripts/scale.fix.js"></script>
+  <script src="//edgeframework.org/javascripts/scale.fix.js"></script>
 </body>
 </html>
